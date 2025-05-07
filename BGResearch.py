@@ -1,7 +1,10 @@
 import discord
 from discord.ext import commands
 import requests
+<<<<<<< HEAD
 from collections import defaultdict
+=======
+>>>>>>> d7c31a3c870aeb3b972fccd42e316f76cb826e6b
 
 
 intents = discord.Intents.default()
@@ -129,6 +132,7 @@ async def show_stats(ctx, nickname: str):
 
     embed.set_footer(text="PUBG 팀 전적 조회 봇")
     await ctx.send(embed=embed)
+<<<<<<< HEAD
 
 @bot.command(name="10판평균딜량")
 async def show_average_damage(ctx, nickname: str):
@@ -246,5 +250,7 @@ async def show_average_damage(ctx, nickname: str):
     await ctx.send(embed=embed)
 
 
+=======
+>>>>>>> d7c31a3c870aeb3b972fccd42e316f76cb826e6b
 # ==== 봇 실행 ====
 bot.run(DISCORD_TOKEN)
