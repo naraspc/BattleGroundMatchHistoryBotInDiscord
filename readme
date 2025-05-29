@@ -1,0 +1,125 @@
+# Team Assignment Bot
+
+Team Assignment Bot은 Discord 음성 채널에 참여 중인 플레이어들의 **포지션**과 **스킬 점수**를 기반으로, 팀당 5명으로 구성된 **최적의 2개 팀**을 자동으로 짜주는 봇입니다.
+
+---
+
+## ✨ 주요 기능
+
+1. **전체 최적화**
+
+   * 10명의 플레이어를 정확히 5명씩 나누고, 모든 포지션(탑·정글·미드·원딜·서폿)에 대해 가능한 배치를 탐색
+   * 두 팀의 **스킬 합 차이**를 최소화하여, 최대한 공평한 매치를 제공합니다
+
+2. **고정 슬롯 지원**
+
+   * `고정` 옵션을 통해 특정 플레이어를 특정 포지션에 사전 고정 배치
+   * 2명부터 최대 6명까지 고정 가능 (홀수 인덱스 → 팀1, 짝수 인덱스 → 팀2)
+   * 나머지 인원은 고정된 상태를 유지한 채로 최적화 탐색
+
+3. **제외 옵션**
+
+   * `제외` 옵션으로 명령어 호출자를 팀 구성 대상에서 제외
+
+4. **간편한 DB 연동**
+
+   * SQLite `players.db` 테이블에 Discord 닉네임과 포지션:스킬 데이터를 저장
+   * 예시 레코드: `discord_nick = "PlayerA", role = "정글:92,미드:85"`
+
+5. **깔끔한 임베드 출력**
+
+   * 팀별 멤버, 배정 포지션, 스킬 점수를 예쁘게 임베드 메시지로 전송
+
+---
+
+## 🚀 설치 및 실행
+
+1. 저장소 클론:
+
+   ```bash
+   git clone https://github.com/your-repo/TeamAssignmentBot.git
+   cd TeamAssignmentBot
+   ```
+
+2. 의존성 설치:
+
+   ```bash
+   pip install discord.py
+   ```
+
+3. 데이터베이스 준비 (`players.db`):
+
+   ```sql
+   CREATE TABLE players (
+     discord_nick TEXT PRIMARY KEY,
+     role TEXT NOT NULL  -- ex. "정글:92,미드:85"
+   );
+   ```
+
+   * 플레이어별 포지션과 스킬 점수를 `,`로 구분해 입력합니다.
+
+4. 환경 변수 설정:
+
+   * `.env` 파일 또는 시스템 환경 변수에 Discord Bot Token을 추가
+
+   ```bash
+   export DISCORD_BOT_TOKEN="YOUR_TOKEN_HERE"
+   ```
+
+5. 봇 실행:
+
+   ```bash
+   python TeamAssignmentBot.py
+   ```
+
+---
+
+## 💬 사용법
+
+* **전체 최적화**:
+
+  ```bash
+  !전적팀짜기
+  ```
+
+  음성 채널에 참여 중인 10명을 기준으로 최적의 공평 매치를 만듭니다.
+
+* **고정 슬롯** (2\~6명):
+
+  ```bash
+  !전적팀짜기 고정 플레이어1:정글 플레이어2:미드
+  ```
+
+  * `고정` 다음에 `닉네임:포지션` 쌍을 입력
+  * 홀수번째 고정 → 팀1, 짝수번째 고정 → 팀2
+
+* **제외 옵션**:
+
+  ```bash
+  !전적팀짜기 제외
+  ```
+
+  * 명령어 호출자를 팀 구성 대상에서 제외합니다.
+
+---
+
+## 📖 코드 구조
+
+* `get_player_roles`: DB에서 포지션·스킬 데이터 조회
+* `parse_fixed_args`: `고정` 옵션 파싱
+* `split_members`: 음성 채널 멤버 필터링
+* `find_best_assignment`: 전체/고정 포함 최적화 로직 분기
+* `_best_full` / `_best_with_fixed`: 브루트포스 탐색
+* `_assign_roles` / `_assign_roles_with_fixed`: 포지션 순열별 스킬 합 계산
+* `format_assignment`: 임베드 메시지 포맷
+
+---
+
+## 🛠️ 기여
+
+자유롭게 이슈를 등록하거나 PR을 보내주세요!
+항상 피드백 환영합니다. 😄
+
+---
+
+© 2025 Team Assignment Bot  |  License: MIT
